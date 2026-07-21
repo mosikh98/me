@@ -15,22 +15,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
-        continue-on-error: true
         with:
           log-accepted-android-sdk-licenses: false
-          packages: 'platforms;android-37 build-tools;37.0.0 platform-tools'
-
-      - name: Ensure Android 37 platform is installed (fallback)
-        run: |
-          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 3 -name sdkmanager -type f | head -n1)
-          if [ -z "$SDKMANAGER" ]; then
-            echo "::error::Could not locate sdkmanager under $ANDROID_HOME/cmdline-tools"
-            find $ANDROID_HOME/cmdline-tools -maxdepth 3
-            exit 1
-          fi
-          echo "Using sdkmanager at: $SDKMANAGER"
-          yes | "$SDKMANAGER" --update || true
-          echo "y" | "$SDKMANAGER" "platforms;android-37" "build-tools;37.0.0" "platform-tools"
+          packages: 'platforms;android-36 build-tools;36.0.0 platform-tools'
 
       - name: Install NDK
         run: |
@@ -39,7 +26,7 @@ jobs:
             --channel=0 \
             --install "ndk;29.0.14206865"
           echo "NDK_HOME=$ANDROID_HOME/ndk/29.0.14206865" >> $GITHUB_ENV
-          sed -i '/compileSdk = 37/i\    ndkVersion = "29.0.14206865"' ${{ github.workspace }}/V2rayNG/app/build.gradle.kts
+          sed -i '/compileSdk = 36/i\    ndkVersion = "29.0.14206865"' ${{ github.workspace }}/V2rayNG/app/build.gradle.kts
 
       - name: Build libhevtun (native tunnel library)
         run: bash compile-hevtun.sh
