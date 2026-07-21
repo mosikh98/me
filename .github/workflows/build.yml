@@ -15,18 +15,22 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
+        continue-on-error: true
         with:
           log-accepted-android-sdk-licenses: false
           packages: 'platforms;android-37 build-tools;37.0.0 platform-tools'
 
       - name: Ensure Android 37 platform is installed (fallback)
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update || true
-          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-37" "build-tools;37.0.0"
+          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 2 -name sdkmanager -type f | head -n1)
+          echo "Using sdkmanager at: $SDKMANAGER"
+          yes | "$SDKMANAGER" --update || true
+          echo "y" | "$SDKMANAGER" "platforms;android-37" "build-tools;37.0.0" "platform-tools"
 
       - name: Install NDK
         run: |
-          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 2 -name sdkmanager -type f | head -n1)
+          echo "y" | "$SDKMANAGER" \
             --channel=0 \
             --install "ndk;29.0.14206865"
           echo "NDK_HOME=$ANDROID_HOME/ndk/29.0.14206865" >> $GITHUB_ENV
