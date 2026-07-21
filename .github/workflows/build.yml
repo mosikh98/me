@@ -22,14 +22,19 @@ jobs:
 
       - name: Ensure Android 37 platform is installed (fallback)
         run: |
-          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 2 -name sdkmanager -type f | head -n1)
+          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 3 -name sdkmanager -type f | head -n1)
+          if [ -z "$SDKMANAGER" ]; then
+            echo "::error::Could not locate sdkmanager under $ANDROID_HOME/cmdline-tools"
+            find $ANDROID_HOME/cmdline-tools -maxdepth 3
+            exit 1
+          fi
           echo "Using sdkmanager at: $SDKMANAGER"
           yes | "$SDKMANAGER" --update || true
           echo "y" | "$SDKMANAGER" "platforms;android-37" "build-tools;37.0.0" "platform-tools"
 
       - name: Install NDK
         run: |
-          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 2 -name sdkmanager -type f | head -n1)
+          SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -maxdepth 3 -name sdkmanager -type f | head -n1)
           echo "y" | "$SDKMANAGER" \
             --channel=0 \
             --install "ndk;29.0.14206865"
