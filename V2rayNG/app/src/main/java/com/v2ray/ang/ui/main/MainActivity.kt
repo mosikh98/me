@@ -191,7 +191,7 @@ class MainActivity : HelperBaseComponentActivity() {
             toast(R.string.title_file_chooser)
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN &&
+        if (Build.VERSION.SDK_INT >= 37 // CINNAMON_BUN (Android 17) &&
             MmkvManager.decodeSettingsBool(AppConfig.PREF_PROXY_SHARING)
         ) {
             checkAndRequestPermission(PermissionType.ACCESS_LOCAL_NETWORK) {}

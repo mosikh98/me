@@ -331,7 +331,7 @@ object CoreServiceManager {
      * Go side format: tag,direction,value;tag,direction,value;
      */
     fun queryAllOutboundTrafficStats(): List<OutboundTrafficStat> {
-        val payload = coreController.queryAllOutboundTrafficStats()
+        val payload = "" // coreController.queryAllOutboundTrafficStats() - not in released AAR yet
 
         val result = ArrayList<OutboundTrafficStat>()
 

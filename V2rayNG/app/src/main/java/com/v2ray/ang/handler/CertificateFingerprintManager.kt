@@ -16,6 +16,11 @@ object CertificateFingerprintManager {
 
     fun fetchForManualFill(profile: ProfileItem): String? {
         val request = buildRequest(profile) ?: return null
+        // NOTE: temporarily disabled. Libv2ray.fetchQuicCertSha256/fetchTlsCertSha256 exist on
+        // the AndroidLibXrayLite main branch but haven't shipped in a tagged AAR release yet
+        // (latest release: v26.5.9). Restore the real calls below once a release contains them.
+        return null
+        /*
         val result = if (profile.configType == EConfigType.HYSTERIA2) {
             fetch("quic", request) { Libv2ray.fetchQuicCertSha256(it) }
         } else {
@@ -26,6 +31,7 @@ object CertificateFingerprintManager {
             ?.takeIf { it.error.isBlank() }
             ?.sha256
             ?.takeIf { it.isNotBlank() }
+        */
     }
 
     private fun buildRequest(profile: ProfileItem): CertSha256Request? {
