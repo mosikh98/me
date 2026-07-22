@@ -1,6 +1,7 @@
 package com.v2ray.ang.ui.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,9 +26,11 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
@@ -209,7 +215,6 @@ private fun ServerListPage(
                                 onRemoveServer = onRemoveServer
                             )
                         }
-                        AppDivider(modifier = Modifier.padding(horizontal = 12.dp))
                     }
                 } else {
                     ServerItemRow(
@@ -222,7 +227,6 @@ private fun ServerListPage(
                         onMoreServer = onMoreServer,
                         onRemoveServer = onRemoveServer
                     )
-                    AppDivider(modifier = Modifier.padding(horizontal = 12.dp))
                 }
             }
         }
@@ -258,6 +262,7 @@ private fun ServerItemRow(
         isSelected = serverCache.guid == selectedGuid,
         subscriptionRemarks = subRemarks,
         doubleColumnDisplay = false,
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
         onClick = { onSelectServer(serverCache.guid) },
         onShare = { onShareServer(serverCache.guid, profile) },
         onEdit = { onEditServer(serverCache.guid, profile) },
@@ -294,13 +299,13 @@ private fun ServerItemColumn(
             isSelected = serverCache.guid == selectedGuid,
             subscriptionRemarks = subRemarks,
             doubleColumnDisplay = doubleColumnDisplay,
+            modifier = Modifier.padding(6.dp),
             onClick = { onSelectServer(serverCache.guid) },
             onEdit = { onEditServer(serverCache.guid, profile) },
             onShare = { onShareServer(serverCache.guid, profile) },
             onRemove = { onRemoveServer(serverCache.guid) },
             onMore = { onMoreServer(serverCache.guid, profile) }
         )
-        AppDivider(modifier = Modifier.padding(horizontal = 12.dp))
     }
 }
 
@@ -324,53 +329,107 @@ fun ServerListItem(
     trafficUploadBytes: Long = 0L,
     trafficDownloadBytes: Long = 0L,
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(onClick = onClick).then(dragModifier)
-    ) {
-        Box(Modifier.width(10.dp).fillMaxHeight()) {
-            if (isSelected) {
-                Row {
-                    Spacer(Modifier.width(6.dp))
-                    Box(Modifier.width(4.dp).fillMaxHeight().padding(vertical = 10.dp).background(MaterialTheme.colorScheme.primary))
-                }
-            }
-        }
+    val accent = MaterialTheme.colorScheme.primary
+    val cardShape = RoundedCornerShape(20.dp)
+    val cardBackground = if (isSelected) {
+        accent.copy(alpha = 0.12f)
+    } else {
+        MaterialTheme.colorScheme.surfaceContainer
+    }
+    val cardBorder = if (isSelected) accent.copy(alpha = 0.55f) else Color.Transparent
 
-        Column(Modifier.weight(1f).padding(start = 8.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text(remarks, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge.copy(lineBreak = LineBreak.Paragraph), maxLines = 2, overflow = TextOverflow.Ellipsis)
-                if (doubleColumnDisplay) {
-                    IconButton(onClick = onMore, Modifier.size(36.dp)) {
-                        Icon(painterResource(R.drawable.ic_more_vert_24dp), null, Modifier.size(24.dp))
-                    }
-                } else {
-                    IconButton(onClick = onShare, Modifier.size(36.dp)) { Icon(painterResource(R.drawable.ic_share_24dp), null, Modifier.size(24.dp)) }
-                    IconButton(onClick = onEdit, Modifier.size(36.dp)) { Icon(painterResource(R.drawable.ic_edit_24dp), null, Modifier.size(24.dp)) }
-                    IconButton(onClick = onRemove, Modifier.size(36.dp)) { Icon(painterResource(R.drawable.ic_delete_24dp), null, Modifier.size(24.dp)) }
-                }
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                if (subscriptionRemarks.isNotBlank()) {
-                    Box(Modifier.size(24.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)), Alignment.Center) {
-                        Text(subscriptionRemarks.take(1).uppercase(), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                    }
-                }
-                Text(statistics, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(typeDescription, style = MaterialTheme.typography.bodySmall, color = colorConfigType, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(testResult, style = MaterialTheme.typography.bodySmall, color = if (testDelayMillis < 0L) colorPingRed else colorPing, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-            if (trafficUploadBytes > 0L || trafficDownloadBytes > 0L) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .then(dragModifier)
+            .shadow(
+                elevation = if (isSelected) 6.dp else 2.dp,
+                shape = cardShape,
+                clip = false
+            )
+            .border(width = 1.5.dp, color = cardBorder, shape = cardShape)
+            .clip(cardShape)
+            .clickable(onClick = onClick),
+        color = cardBackground,
+        shape = cardShape,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Colorful rounded protocol badge, echoing the app's accent color.
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(accent, accent.copy(alpha = 0.65f))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
-                    "${trafficUploadBytes.toTrafficString()}↑ ${trafficDownloadBytes.toTrafficString()}↓",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    typeDescription.take(1).uppercase(),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
                 )
+            }
+
+            Spacer(Modifier.width(12.dp))
+
+            Column(Modifier.weight(1f)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text(remarks, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge.copy(lineBreak = LineBreak.Paragraph, fontWeight = FontWeight.SemiBold), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    if (doubleColumnDisplay) {
+                        IconButton(onClick = onMore, Modifier.size(32.dp)) {
+                            Icon(painterResource(R.drawable.ic_more_vert_24dp), null, Modifier.size(20.dp))
+                        }
+                    } else {
+                        IconButton(onClick = onShare, Modifier.size(32.dp)) { Icon(painterResource(R.drawable.ic_share_24dp), null, Modifier.size(20.dp)) }
+                        IconButton(onClick = onEdit, Modifier.size(32.dp)) { Icon(painterResource(R.drawable.ic_edit_24dp), null, Modifier.size(20.dp)) }
+                        IconButton(onClick = onRemove, Modifier.size(32.dp)) { Icon(painterResource(R.drawable.ic_delete_24dp), null, Modifier.size(20.dp)) }
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    if (subscriptionRemarks.isNotBlank()) {
+                        Box(Modifier.size(20.dp).clip(CircleShape).background(accent.copy(alpha = 0.18f)), Alignment.Center) {
+                            Text(subscriptionRemarks.take(1).uppercase(), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = accent)
+                        }
+                        Spacer(Modifier.width(6.dp))
+                    }
+                    Text(statistics, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = colorConfigType.copy(alpha = 0.14f)
+                    ) {
+                        Text(
+                            typeDescription,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colorConfigType,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Text(testResult, style = MaterialTheme.typography.labelSmall, color = if (testDelayMillis < 0L) colorPingRed else colorPing, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                if (trafficUploadBytes > 0L || trafficDownloadBytes > 0L) {
+                    Text(
+                        "${trafficUploadBytes.toTrafficString()}↑ ${trafficDownloadBytes.toTrafficString()}↓",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }
