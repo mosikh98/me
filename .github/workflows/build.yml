@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -61,3 +63,12 @@ jobs:
         with:
           name: m-debug-apk
           path: V2rayNG/app/build/outputs/apk/**/*.apk
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: m build #${{ github.run_number }}
+          body: Automated debug build from commit ${{ github.sha }}
+          files: V2rayNG/app/build/outputs/apk/**/*.apk
