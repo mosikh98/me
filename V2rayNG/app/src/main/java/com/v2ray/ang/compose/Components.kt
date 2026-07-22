@@ -229,6 +229,7 @@ fun AppListItem(
             colors = CheckboxDefaults.colors(checkedColor = colorFabActive())
         )
     }
+    }
 }
 
 private fun createBitmapFromDrawable(drawable: Drawable): Bitmap {
