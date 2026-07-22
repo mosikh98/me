@@ -415,7 +415,7 @@ fun ServerListItem(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                    Text(testResult, style = MaterialTheme.typography.labelSmall, color = if (testDelayMillis < 0L) colorPingRed else colorPing, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(testResult, style = MaterialTheme.typography.labelSmall, color = if (testDelayMillis < 0L) colorPingRed else colorPing(), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 if (trafficUploadBytes > 0L || trafficDownloadBytes > 0L) {
                     Text(

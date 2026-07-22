@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -288,7 +290,6 @@ fun RoutingSettingScreen(
                             }
                         )
                     }
-                    AppDivider(modifier = Modifier.padding(horizontal = 14.dp))
                 }
             }
         }
@@ -314,10 +315,17 @@ private fun RoutingRulesetItem(
     onEdit: () -> Unit,
     onEnabledChange: (Boolean) -> Unit
 ) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 3.dp),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+    ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -380,5 +388,6 @@ private fun RoutingRulesetItem(
                 )
             )
         }
+    }
     }
 }

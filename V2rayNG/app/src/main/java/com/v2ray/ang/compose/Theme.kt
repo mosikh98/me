@@ -99,8 +99,13 @@ private val DarkColor = darkColorScheme(
 )
 
 // Semantic Colors
-val colorPing = Color(0xFF009966) // Green 绿色
-val colorPingRed = Color(0xFFFF0099) // Pink Red 粉红色
+val colorPingRed = Color(0xFFFF0099) // Pink Red 粉红色 (kept fixed: always signals a failed test)
+
+@Composable
+fun colorPing(): Color {
+    val accent by AccentColorManager.accentColor.collectAsState()
+    return accent ?: Color(0xFF009966) // Green 绿色 (default when no accent chosen)
+}
 val colorConfigType = Color(0xFFf97910) // Orange 橙色
 private val colorFabActiveDefault = Color(0xFFf97910) // Orange 橙色
 
