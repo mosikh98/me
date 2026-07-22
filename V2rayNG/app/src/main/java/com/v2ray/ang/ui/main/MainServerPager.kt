@@ -331,23 +331,19 @@ fun ServerListItem(
 ) {
     val accent = MaterialTheme.colorScheme.primary
     val cardShape = RoundedCornerShape(20.dp)
-    val cardBackground = if (isSelected) {
-        accent.copy(alpha = 0.12f)
-    } else {
-        MaterialTheme.colorScheme.surfaceContainer
-    }
-    val cardBorder = if (isSelected) accent.copy(alpha = 0.55f) else Color.Transparent
+    val cardBackground = MaterialTheme.colorScheme.surfaceContainer
+    val cardBorder = if (isSelected) accent else Color.Transparent
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .then(dragModifier)
             .shadow(
-                elevation = if (isSelected) 6.dp else 2.dp,
+                elevation = 1.dp,
                 shape = cardShape,
                 clip = false
             )
-            .border(width = 1.5.dp, color = cardBorder, shape = cardShape)
+            .border(width = 1.dp, color = cardBorder, shape = cardShape)
             .clip(cardShape)
             .clickable(onClick = onClick),
         color = cardBackground,
