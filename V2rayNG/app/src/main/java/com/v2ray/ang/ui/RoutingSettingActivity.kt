@@ -362,7 +362,7 @@ private fun RoutingRulesetItem(
                 Text(
                     text = ruleset.outboundTag,
                     style = MaterialTheme.typography.labelMedium,
-                    color = colorConfigType
+                    color = colorConfigType()
                 )
             }
         }

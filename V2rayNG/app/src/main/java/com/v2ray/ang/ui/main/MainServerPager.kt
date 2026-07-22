@@ -404,13 +404,13 @@ fun ServerListItem(
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Surface(
                         shape = RoundedCornerShape(8.dp),
-                        color = colorConfigType.copy(alpha = 0.14f)
+                        color = colorConfigType().copy(alpha = 0.14f)
                     ) {
                         Text(
                             typeDescription,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
                             style = MaterialTheme.typography.labelSmall,
-                            color = colorConfigType,
+                            color = colorConfigType(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )

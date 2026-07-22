@@ -106,7 +106,13 @@ fun colorPing(): Color {
     val accent by AccentColorManager.accentColor.collectAsState()
     return accent ?: Color(0xFF009966) // Green 绿色 (default when no accent chosen)
 }
-val colorConfigType = Color(0xFFf97910) // Orange 橙色
+private val colorConfigTypeDefault = Color(0xFFf97910) // Orange 橙色 (default when no accent chosen)
+
+@Composable
+fun colorConfigType(): Color {
+    val accent by AccentColorManager.accentColor.collectAsState()
+    return accent ?: colorConfigTypeDefault
+}
 private val colorFabActiveDefault = Color(0xFFf97910) // Orange 橙色
 
 @Composable
@@ -211,10 +217,10 @@ fun AppTheme(
     val accent by AccentColorManager.accentColor.collectAsState()
     val colorScheme = accent?.let { color ->
         baseColorScheme.copy(
-            primary = if (darkTheme) color else Color.Black,
+            primary = color,
             secondary = color,
             tertiary = color,
-            surfaceTint = if (darkTheme) color else Color.Black,
+            surfaceTint = color,
         )
     } ?: baseColorScheme
     val snackbarController = rememberAppSnackbarController()
