@@ -1,6 +1,7 @@
 package com.v2ray.ang.ui.main
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -26,6 +28,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -273,9 +276,19 @@ fun MainScreen(
             val layoutDirection = LocalLayoutDirection.current
 
             if (groups.isNotEmpty()) {
+                val accentTint = com.v2ray.ang.compose.colorFabActive()
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    accentTint.copy(alpha = 0.06f),
+                                    MaterialTheme.colorScheme.background
+                                ),
+                                endY = 400f
+                            )
+                        )
                         .padding(innerPadding)
                 ) {
                     if (groups.size > 1) {

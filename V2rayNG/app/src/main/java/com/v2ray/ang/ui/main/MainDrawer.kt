@@ -132,7 +132,7 @@ fun DrawerMenuItem(
             .heightIn(min = 48.dp)
             .clickable(onClick = onClick)
             .background(
-                if (selected) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
+                if (selected) com.v2ray.ang.compose.colorFabActive().copy(alpha = 0.15f)
                 else Color.Transparent
             )
             .padding(horizontal = 16.dp, vertical = 0.dp),
@@ -142,7 +142,7 @@ fun DrawerMenuItem(
             painter = icon,
             contentDescription = null,
             modifier = Modifier.size(24.dp),
-            tint = MaterialTheme.colorScheme.onSurface
+            tint = com.v2ray.ang.compose.colorFabActive()
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(
