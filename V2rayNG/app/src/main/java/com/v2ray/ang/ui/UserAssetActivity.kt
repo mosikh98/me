@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -336,7 +338,6 @@ fun UserAssetScreen(
                     onEdit = { onEditAsset(item.guid) },
                     onDeleteClick = { deleteTargetGuid = item.guid }
                 )
-                AppDivider(modifier = Modifier.padding(horizontal = 14.dp))
             }
         }
     }
@@ -373,6 +374,13 @@ private fun UserAssetItem(
     }
     val showEditButton = item.assetUrl.locked != true && item.assetUrl.url != "file"
 
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 3.dp),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+    ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -408,5 +416,6 @@ private fun UserAssetItem(
                 modifier = Modifier.size(24.dp)
             )
         }
+    }
     }
 }
