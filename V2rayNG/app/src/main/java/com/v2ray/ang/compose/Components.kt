@@ -165,7 +165,7 @@ fun AppListItem(
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 3.dp),
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainer,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
     Row(
         modifier = Modifier

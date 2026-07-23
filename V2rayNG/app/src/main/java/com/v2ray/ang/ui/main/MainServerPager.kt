@@ -331,7 +331,7 @@ fun ServerListItem(
 ) {
     val accent = MaterialTheme.colorScheme.primary
     val cardShape = RoundedCornerShape(20.dp)
-    val cardBackground = MaterialTheme.colorScheme.surfaceContainer
+    val cardBackground = MaterialTheme.colorScheme.surfaceContainerHigh
     val cardBorder = if (isSelected) accent else Color.Transparent
 
     Surface(
