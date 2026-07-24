@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mosikh98.m"
+    namespace = "com.v2ray.ang"
     compileSdk = 36
 
     defaultConfig {
